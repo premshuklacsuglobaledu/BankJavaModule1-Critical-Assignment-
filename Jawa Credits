@@ -1,0 +1,121 @@
+class BankAccount {
+    
+    private String firstName;
+    private String lastName;
+    private int accountID;
+    protected double balance;
+    
+    
+    // Constructor
+public BankAccount() {
+    this.balance = 180000;
+    
+}
+
+
+// Deposit method
+public void deposit(double amount) {
+    if (amount > 0) {
+        balance += amount;
+        System.out.println("Added more shiney credits to pouch: $" + amount);
+    } else {
+        System.out.println("Invalid deposit amount.");
+    }
+}
+
+
+// Withdrawal method
+public void withdrawal(double amount) {
+    if (amount > 0 && balance >= amount) {
+        balance -= amount;
+        System.out.println("Withdrew: $" + amount);
+    } else if (amount > balance) {
+        System.out.println("Uh oh! Jawa no have enough credits");
+    } else {
+        System.out.println("Invalid withdrawal amount, try again please");
+    }
+}
+
+
+//Setters and Getters
+//These methods control access to private data,
+//Think them as key to unlock sandcrawler, with key, you can't get in
+public void setFirstName(String firstName) { this.firstName = firstName;
+    
+}
+public void setLastName(String lastName) {this.lastName = lastName;
+    
+}
+public void setAccountID(int accountID) {this.accountID = accountID;
+    
+}
+
+public String getFirstName() { return firstName; }
+public String getLastName() { return lastName;}
+public int getAccountID() { return accountID;}
+public double getBalance() { return balance;}
+
+public void accountSummary() {
+    System.out.println("Account Summary");
+    System.out.println("Account Holder: " + firstName + " " + lastName);
+    System.out.println("Account ID: " + accountID);
+    System.out.println("Current Balance: $" + String.format("%.2f", balance));
+    
+    } 
+}
+
+
+
+class CheckingAccount extends BankAccount {
+    private double interestRate;
+    private final double OVERDRAFT_FEE = 30.0;
+
+
+public CheckingAccount(double interestRate) {
+    super();
+    this.interestRate = interestRate;
+}
+
+public void processWithdrawal(double amount) {
+    if (amount <= 0) {
+        System.out.println("Invalid widhrawal amount.");
+        return;
+    }
+    
+    if (balance >= amount) {
+        balance -= amount;
+        System.out.println("Withdrew: $" + amount);
+    } else {
+        balance -= (amount + OVERDRAFT_FEE);
+        System.out.println("Overdraft! You withdrew more than your balance.");
+        System.out.println("A $30 overdraft fee has been applied");
+    }
+}
+
+
+public void displayAccount() {
+    accountSummary();
+    System.out.println("Interest Rate: " + (interestRate * 100) + "%");
+    }
+}
+
+
+
+
+public class BankAccountTest {
+    public static void main(String[] args) {
+        CheckingAccount account1 = new CheckingAccount(0.02);
+        
+        account1.setFirstName("Luke");
+        account1.setLastName("Skywalker");
+        account1.setAccountID(1001);
+        
+        account1.deposit(500);
+        account1.processWithdrawal(100);
+        account1.processWithdrawal(100);
+        
+        account1.displayAccount();
+    }
+}
+
+
